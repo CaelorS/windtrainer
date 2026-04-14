@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Play, Wind, Timer, Plane, Settings, Mail, BadgeInfo } from "lucide-react";
+import { supabase } from "./supabase";
 
-const STORAGE_KEY = "windtraining-browser-scores-v3";
 const SIZE = 320;
 const CENTER = SIZE / 2;
 const RADIUS = 118;
@@ -60,19 +60,28 @@ function getPointFromEvent(e, rect) {
   return { x, y };
 }
 
-function loadScores() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
+async function loadScores() {
+  const { data, error } = await supabase
+    .from("scores")
+    .select("*")
+    .order("score", { ascending: false })
+    .order("average_error", { ascending: true })
+    .order("average_time_ms", { ascending: true });
+
+  if (error) {
+    console.error("Erreur chargement scores:", error);
     return [];
   }
+
+  return data ?? [];
 }
 
-function saveScores(scores) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+async function saveScore(record) {
+  const { error } = await supabase.from("scores").insert(record);
+
+  if (error) {
+    console.error("Erreur sauvegarde score:", error);
+  }
 }
 
 function formatDuration(ms) {
@@ -337,13 +346,16 @@ export default function WindtrainingApp() {
   const [feedback, setFeedback] = useState(null);
   const [history, setHistory] = useState([]);
   const [finished, setFinished] = useState(false);
-  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
-  const [improvementIdea, setImprovementIdea] = useState("");
   const [compact, setCompact] = useState(false);
 
-  useEffect(() => {
-    setLeaderboard(loadScores());
-  }, []);
+useEffect(() => {
+  async function fetchScores() {
+    const scores = await loadScores();
+    setLeaderboard(scores);
+  }
+
+  fetchScores();
+}, []);
 
   useEffect(() => {
     const onResize = () => setCompact(window.innerWidth < 900);
@@ -363,14 +375,6 @@ export default function WindtrainingApp() {
     if (history.length === 0) return 0;
     return Math.round(history.reduce((sum, h) => sum + h.timeMs, 0) / history.length);
   }, [history]);
-
-  function openImprovementEmail() {
-    const subject = encodeURIComponent("Windtraining - idée d'amélioration");
-    const body = encodeURIComponent(improvementIdea.trim());
-    window.location.href = `mailto:windtraining.slouchy218@simplelogin.com?subject=${subject}&body=${body}`;
-    setFeedbackModalOpen(false);
-    setImprovementIdea("");
-  }
 
   function startGame() {
     const qs = Array.from({ length: questionCount }, () => generateQuestion(mode));
@@ -409,28 +413,33 @@ export default function WindtrainingApp() {
     setFeedback(entry);
   }
 
-  function finishGame(finalHistory = history) {
-    const finalScore = finalHistory.reduce((sum, h) => sum + h.points, 0);
-    const finalAverageError = finalHistory.length === 0 ? 0 : Math.round(finalHistory.reduce((sum, h) => sum + h.errorDeg, 0) / finalHistory.length);
-    const finalAverageTimeMs = finalHistory.length === 0 ? 0 : Math.round(finalHistory.reduce((sum, h) => sum + h.timeMs, 0) / finalHistory.length);
+async function finishGame(finalHistory = history) {
+  const finalScore = finalHistory.reduce((sum, h) => sum + h.points, 0);
+  const finalAverageError =
+    finalHistory.length === 0
+      ? 0
+      : Math.round(finalHistory.reduce((sum, h) => sum + h.errorDeg, 0) / finalHistory.length);
+  const finalAverageTimeMs =
+    finalHistory.length === 0
+      ? 0
+      : Math.round(finalHistory.reduce((sum, h) => sum + h.timeMs, 0) / finalHistory.length);
 
-    const record = {
-      id: crypto.randomUUID(),
-      pseudo: pseudo.trim() || "Pilote",
-      score: finalScore,
-      questions: questionCount,
-      mode,
-      averageError: finalAverageError,
-      averageTimeMs: finalAverageTimeMs,
-      createdAt: new Date().toISOString(),
-    };
+  const record = {
+    pseudo: pseudo.trim() || "Pilote",
+    score: finalScore,
+    questions: questionCount,
+    mode,
+    average_error: finalAverageError,
+    average_time_ms: finalAverageTimeMs,
+  };
 
-    const updated = [...leaderboard, record];
-    setLeaderboard(updated);
-    saveScores(updated);
-    setFinished(true);
-    setStarted(false);
-  }
+  await saveScore(record);
+
+  const refreshedScores = await loadScores();
+  setLeaderboard(refreshedScores);
+  setFinished(true);
+  setStarted(false);
+}
 
   function nextQuestion() {
     if (index + 1 >= questions.length) {
