@@ -177,26 +177,21 @@ function Leaderboard({ scores }) {
                     <div className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
                       {count} question{count > 1 ? "s" : ""}
                     </div>
-                    {filtered.length === 0 ? (
-                      <div className="text-sm text-slate-400">Aucun score</div>
-                    ) : (
-                      <div className="space-y-2">
-                        {filtered.map((s, i) => (
-                          <div
-                            key={s.id}
-                            className="flex items-center justify-between rounded-xl bg-white px-3 py-2 text-sm max-sm:flex-col max-sm:items-start max-sm:gap-2"
-                          >
-                            <div className="flex min-w-0 items-center gap-3">
-                              <div className="w-6 text-slate-500">#{i + 1}</div>
-                              <div className="truncate font-medium">{s.pseudo}</div>
-                            </div>
-                            <div className="flex items-center gap-3 text-slate-600">
-                              <span>{s.score} pts</span>
-                              <span>{s.average_error}°</span>
-                            </div>
-                            </div>
+                    {filtered.map((s, i) => (
+                        <div
+                          key={s.id}
+                          className="flex items-center justify-between rounded-xl bg-white px-3 py-2 text-sm max-sm:flex-col max-sm:items-start max-sm:gap-2"
+                        >
+                          <div className="flex min-w-0 items-center gap-3">
+                            <div className="w-6 text-slate-500">#{i + 1}</div>
+                            <div className="truncate font-medium">{s.pseudo}</div>
                           </div>
-                        ))}
+                          <div className="flex items-center gap-3 text-slate-600">
+                            <span>{s.score} pts</span>
+                            <span>{s.average_error}°</span>
+                          </div>
+                        </div>
+                      ))}
                       </div>
                     )}
                   </div>
