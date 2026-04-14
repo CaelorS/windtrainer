@@ -161,37 +161,57 @@ function Leaderboard({ scores }) {
           <Trophy className="h-5 w-5" /> Meilleurs scores
         </div>
       </div>
+
       <div className="space-y-5 p-6 pt-5">
         {modes.map((mode) => (
           <div key={mode} className="space-y-3">
-            <div className="text-sm font-semibold capitalize text-slate-700">{mode}</div>
+            <div className="text-sm font-semibold capitalize text-slate-700">
+              {mode}
+            </div>
+
             <div className="space-y-3">
               {counts.map((count) => {
                 const filtered = scores
-                  .filter((s) => (s.mode || "atterrissage") === mode && s.questions === count)
-                  .sort((a, b) => b.score - a.score || a.averageError - b.averageError || a.averageTimeMs - b.averageTimeMs)
+                  .filter(
+                    (s) => (s.mode || "atterrissage") === mode && s.questions === count
+                  )
+                  .sort(
+                    (a, b) =>
+                      b.score - a.score ||
+                      a.average_error - b.average_error ||
+                      a.average_time_ms - b.average_time_ms
+                  )
                   .slice(0, 5);
 
                 return (
-                  <div key={`${mode}-${count}`} className="rounded-2xl bg-slate-50 p-3">
+                  <div
+                    key={`${mode}-${count}`}
+                    className="rounded-2xl bg-slate-50 p-3"
+                  >
                     <div className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
                       {count} question{count > 1 ? "s" : ""}
                     </div>
-                    {filtered.map((s, i) => (
-                        <div
-                          key={s.id}
-                          className="flex items-center justify-between rounded-xl bg-white px-3 py-2 text-sm max-sm:flex-col max-sm:items-start max-sm:gap-2"
-                        >
-                          <div className="flex min-w-0 items-center gap-3">
-                            <div className="w-6 text-slate-500">#{i + 1}</div>
-                            <div className="truncate font-medium">{s.pseudo}</div>
+
+                    {filtered.length === 0 ? (
+                      <div className="text-sm text-slate-400">Aucun score</div>
+                    ) : (
+                      <div className="space-y-2">
+                        {filtered.map((s, i) => (
+                          <div
+                            key={s.id}
+                            className="flex items-center justify-between rounded-xl bg-white px-3 py-2 text-sm max-sm:flex-col max-sm:items-start max-sm:gap-2"
+                          >
+                            <div className="flex min-w-0 items-center gap-3">
+                              <div className="w-6 text-slate-500">#{i + 1}</div>
+                              <div className="truncate font-medium">{s.pseudo}</div>
+                            </div>
+
+                            <div className="flex items-center gap-3 text-slate-600">
+                              <span>{s.score} pts</span>
+                              <span>{s.average_error}°</span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-3 text-slate-600">
-                            <span>{s.score} pts</span>
-                            <span>{s.average_error}°</span>
-                          </div>
-                        </div>
-                      ))}
+                        ))}
                       </div>
                     )}
                   </div>
