@@ -192,7 +192,8 @@ function Leaderboard({ scores }) {
                             </div>
                             <div className="flex items-center gap-3 text-slate-600">
                               <span>{s.score} pts</span>
-                              <span>{s.averageError}°</span>
+                              <span>{s.average_error}°</span>
+                            </div>
                             </div>
                           </div>
                         ))}
