@@ -499,7 +499,7 @@ async function finishGame(finalHistory = history) {
                     <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-sky-100 px-3 py-1 text-sm font-medium text-sky-800">
                       <Wind className="h-4 w-4" /> Entraînement vent / piste
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">windtraining</h1>
+                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">Windtrainer</h1>
                     <p className="mt-2 max-w-2xl text-sm text-slate-600 md:text-base">Deviens un pro du vent relatif !</p>
                   </div>
                   <div className="grid grid-cols-2 gap-3 text-sm md:min-w-[220px]">
