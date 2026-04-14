@@ -11,6 +11,10 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
+function normalizeAngle(angle) {
+  return ((angle % 360) + 360) % 360;
+}
+
 function shortestAngularDistance(a, b) {
   const diff = Math.abs(normalizeAngle(a) - normalizeAngle(b));
   return Math.min(diff, 360 - diff);
