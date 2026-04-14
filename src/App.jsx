@@ -742,7 +742,7 @@ async function finishGame(finalHistory = history) {
             </div>
             <div className="space-y-3 p-6 text-sm text-slate-600">
               <p>Le but est d'identifier d'où vient le vent par rapport à l'avion.</p>
-              <p>En mode atterrissage, la piste te donne le cap (il suffit d'ajouter un 0, piste 12 = orientée à 120°.</p>
+              <p>En mode atterrissage, la piste te donne le cap (il suffit d'ajouter un 0, piste 12 = orientée à 120°)</p>
               <p>En mode navigation, le cap est affiché directement en degrés.</p>
               <p>Le score récompense à la fois la précision angulaire et la rapidité de réponse.</p>
               <p>En mode navigation, le score tombe à 0 à partir de 30° d'erreur.</p>
