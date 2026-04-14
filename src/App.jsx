@@ -678,14 +678,7 @@ export default function WindtrainingApp() {
                 </div>
 
                 <div className="flex flex-col gap-3 md:flex-row">
-                  <button
-                    className="w-full rounded-2xl border border-slate-300 bg-white py-4 font-medium text-slate-900"
-                    onClick={() => setFeedbackModalOpen(true)}
-                  >
-                    <span className="inline-flex items-center gap-2">
-                      <Mail className="h-4 w-4" /> une idée d'amélioration ?
-                    </span>
-                  </button>
+          
                   <button
                     className="w-full rounded-2xl border border-slate-300 bg-white py-4 font-medium text-slate-900"
                     onClick={() => {
@@ -726,46 +719,7 @@ export default function WindtrainingApp() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {feedbackModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.96, opacity: 0, y: 10 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.96, opacity: 0, y: 10 }}
-              className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl"
-            >
-              <h3 className="text-xl font-bold text-slate-900">Une idée d'amélioration ?</h3>
-              <p className="mt-2 text-sm text-slate-600">
-                Écris ton idée ci-dessous. La validation ouvrira ton application mail avec le message prêt à être envoyé.
-              </p>
-              <textarea
-                value={improvementIdea}
-                onChange={(e) => setImprovementIdea(e.target.value)}
-                className="mt-4 min-h-[180px] w-full rounded-2xl border border-slate-200 p-4 text-sm outline-none focus:border-slate-400"
-                placeholder="Exemple : ajouter un mode vent de travers, afficher la composante de vent, améliorer les animations..."
-              />
-              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-                <button className="w-full rounded-2xl border border-slate-300 bg-white py-3 font-medium text-slate-900" onClick={() => setFeedbackModalOpen(false)}>
-                  Annuler
-                </button>
-                <button
-                  className="w-full rounded-2xl bg-sky-600 py-3 font-semibold text-white shadow disabled:cursor-not-allowed disabled:opacity-50"
-                  onClick={openImprovementEmail}
-                  disabled={!improvementIdea.trim()}
-                >
-                  Envoyer par mail
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    
     </div>
   );
 }
