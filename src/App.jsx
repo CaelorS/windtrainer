@@ -242,16 +242,19 @@ function CompassBoard({ selectedAngle, correctAngle, showCorrection, onSelect, o
   const center = size / 2;
   const radius = compact ? 102 : RADIUS;
 
-  const handlePointer = (e) => {
-    if (!boardRef.current) return null;
-    const rect = boardRef.current.getBoundingClientRect();
-    const { x, y } = getPointFromEvent(e, rect);
-    const dx = x - center;
-    const dy = y - center;
-    const angle = normalizeAngle((Math.atan2(dy, dx) * 180) / Math.PI + 90);
-    onSelect(angle);
-    return angle;
-  };
+const handlePointer = (e) => {
+  if (!boardRef.current) return null;
+  const rect = boardRef.current.getBoundingClientRect();
+  const { x, y } = getPointFromEvent(e, rect);
+  const dx = x - center;
+  const dy = y - center;
+  const angle = normalizeAngle((Math.atan2(dy, dx) * 180) / Math.PI + 90);
+
+  if (Number.isNaN(angle)) return null;
+
+  onSelect(angle);
+  return angle;
+};
 
   const handleRelease = (e) => {
     if (!dragging) return;
