@@ -242,7 +242,7 @@ function Leaderboard({ scores, isMobile }) {
                 {counts.map((count) => {
                   const filtered = scores
                     .filter((s) => (s.mode || "atterrissage") === mode && s.questions === count)
-                    .sort((a, b) => b.score - a.score || a.averageError - b.averageError || a.averageTimeMs - b.averageTimeMs)
+                    .sort((a, b) => b.score - a.score || a.average_error - b.average_error || a.average_time_ms - b.average_time_ms)
                     .slice(0, 5);
 
                   return (
@@ -274,7 +274,7 @@ function Leaderboard({ scores, isMobile }) {
                               </div>
                               <div style={{ display: "flex", gap: 12, color: "#475569", fontSize: 14, flexWrap: "wrap" }}>
                                 <span>{s.score} pts</span>
-                                <span>{s.averageError}°</span>
+                                <span>{s.average_error}°</span>
                               </div>
                             </div>
                           ))}
@@ -773,13 +773,29 @@ function startGame() {
                 </div>
                 
                   {debugMessage && (
-                    <div className="rounded-2xl bg-slate-100 p-3 text-sm text-slate-700">
+                    <div
+                      style={{
+                        borderRadius: 16,
+                        background: "#e2e8f0",
+                        padding: 12,
+                        fontSize: 14,
+                        color: "#334155",
+                      }}
+                    >
                       debug: {debugMessage}
                     </div>
                   )}
                   
                   {debugError && (
-                    <div className="rounded-2xl bg-rose-100 p-3 text-sm text-rose-800">
+                    <div
+                      style={{
+                        borderRadius: 16,
+                        background: "#ffe4e6",
+                        padding: 12,
+                        fontSize: 14,
+                        color: "#9f1239",
+                      }}
+                    >
                       erreur: {debugError}
                     </div>
                   )}
