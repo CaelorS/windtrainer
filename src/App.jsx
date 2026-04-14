@@ -735,7 +735,6 @@ async function finishGame(finalHistory = history) {
         </div>
 
         <div className="space-y-6">
-          <Leaderboard scores={leaderboard} />
 
           <SurfaceCard>
             <div className="p-6 pb-0">
@@ -751,6 +750,9 @@ async function finishGame(finalHistory = history) {
               <p>Le facteur temps descend au minimum à 0,2, donc une bonne réponse lente rapporte encore un peu.</p>
             </div>
           </SurfaceCard>
+          
+          <Leaderboard scores={leaderboard} />
+          
         </div>
       </div>
 
