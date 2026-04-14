@@ -11,11 +11,12 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
-function normalizeAngle(a) {
-  let x = a % 360;
-  if (x < 0) x += 360;
-  return x;
-}
+const angle = normalizeAngle((Math.atan2(dy, dx) * 180) / Math.PI + 90);
+
+if (Number.isNaN(angle)) return null;
+
+onSelect(angle);
+return angle;
 
 function shortestAngularDistance(a, b) {
   const diff = Math.abs(normalizeAngle(a) - normalizeAngle(b));
@@ -54,7 +55,16 @@ function generateQuestion(mode) {
 }
 
 function getPointFromEvent(e, rect) {
-  const point = "touches" in e && e.touches.length > 0 ? e.touches[0] : e;
+  let point;
+
+  if ("touches" in e && e.touches.length > 0) {
+    point = e.touches[0];
+  } else if ("changedTouches" in e && e.changedTouches.length > 0) {
+    point = e.changedTouches[0];
+  } else {
+    point = e;
+  }
+
   const x = point.clientX - rect.left;
   const y = point.clientY - rect.top;
   return { x, y };
@@ -405,8 +415,8 @@ useEffect(() => {
   }
 
   function submitAnswer(finalAngle = selectedAngle) {
-    if (!current || finalAngle == null || feedback) return;
-
+    if (!current || finalAngle == null || Number.isNaN(finalAngle) || feedback) return;
+    
     const timeMs = Date.now() - questionStart;
     const errorDeg = shortestAngularDistance(finalAngle, current.relativeFrom);
     const leftRightConfusion = mode === "atterrissage" && isLeftRightConfusion(finalAngle, current.relativeFrom);
