@@ -6,8 +6,6 @@ import { supabase } from "./supabase";
 const SIZE = 320;
 const CENTER = SIZE / 2;
 const RADIUS = 118;
-const [debugMessage, setDebugMessage] = useState("");
-const [debugError, setDebugError] = useState("");
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -482,6 +480,8 @@ export default function WindtrainingApp() {
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [improvementIdea, setImprovementIdea] = useState("");
   const [isMobile, setIsMobile] = useState(false);
+  const [debugMessage, setDebugMessage] = useState("");
+  const [debugError, setDebugError] = useState("");
 
 useEffect(() => {
   async function fetchScores() {
