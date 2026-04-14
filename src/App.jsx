@@ -11,13 +11,6 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
-const angle = normalizeAngle((Math.atan2(dy, dx) * 180) / Math.PI + 90);
-
-if (Number.isNaN(angle)) return null;
-
-onSelect(angle);
-return angle;
-
 function shortestAngularDistance(a, b) {
   const diff = Math.abs(normalizeAngle(a) - normalizeAngle(b));
   return Math.min(diff, 360 - diff);
