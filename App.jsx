@@ -6,6 +6,8 @@ import { supabase } from "./supabase";
 const SIZE = 320;
 const CENTER = SIZE / 2;
 const RADIUS = 118;
+const [debugMessage, setDebugMessage] = useState("");
+const [debugError, setDebugError] = useState("");
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -530,18 +532,30 @@ useEffect(() => {
     setImprovementIdea("");
   }
 
-  function startGame() {
+function startGame() {
+  try {
+    setDebugError("");
+    setDebugMessage("startGame called");
+
     const qs = Array.from({ length: questionCount }, () => generateQuestion(mode));
+
+    setDebugMessage(`questions generated: ${qs.length}`);
+
     setQuestions(qs);
     setIndex(0);
     setSelectedAngle(null);
     setFeedback(null);
-    setTotalScore(0);
     setHistory([]);
     setFinished(false);
     setStarted(true);
     setQuestionStart(Date.now());
+
+    setDebugMessage("game started");
+  } catch (err) {
+    console.error("startGame crash:", err);
+    setDebugError(String(err?.message || err));
   }
+}
 
   function submitAnswer(finalAngle = selectedAngle) {
     if (!current || finalAngle == null || feedback) return;
@@ -757,7 +771,19 @@ useEffect(() => {
                     </div>
                   </div>
                 </div>
-
+                
+                  {debugMessage && (
+                    <div className="rounded-2xl bg-slate-100 p-3 text-sm text-slate-700">
+                      debug: {debugMessage}
+                    </div>
+                  )}
+                  
+                  {debugError && (
+                    <div className="rounded-2xl bg-rose-100 p-3 text-sm text-rose-800">
+                      erreur: {debugError}
+                    </div>
+                  )}
+                
                 <AppButton primary onClick={startGame} style={{ padding: "18px 20px", fontSize: 16 }}>
                   <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                     <Play size={18} /> Lancer la partie
