@@ -800,11 +800,26 @@ function startGame() {
                     </div>
                   )}
                 
-                <AppButton primary onClick={startGame} style={{ padding: "18px 20px", fontSize: 16 }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                    <Play size={18} /> Lancer la partie
-                  </span>
-                </AppButton>
+                <button
+                  type="button"
+                  onClick={() => {
+                    alert("clic ok");
+                    startGame();
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "18px 20px",
+                    borderRadius: 18,
+                    border: "none",
+                    background: "red",
+                    color: "white",
+                    fontWeight: 700,
+                    fontSize: 16,
+                  }}
+                >
+                  TEST LANCER
+                </button>
+                
               </CardContent>
             </Card>
           )}
