@@ -31,7 +31,7 @@ function generateQuestion(mode) {
   let windFrom;
 
   if (mode === "atterrissage") {
-    const steps = Math.floor(Math.random() * 13) - 6;
+    const steps = Math.floor(Math.random() * 37) - 18;
     const offset = steps * 5;
     windFrom = normalizeAngle(heading + offset);
   } else {
